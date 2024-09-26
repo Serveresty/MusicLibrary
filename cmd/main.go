@@ -5,13 +5,17 @@ import (
 	"MusicLibrary/database"
 	"MusicLibrary/internal/controllers"
 	"MusicLibrary/internal/routes"
+	"MusicLibrary/pkg/logger"
 	"log"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func init() {
-
+	if err := godotenv.Load("./configs/.env"); err != nil {
+		log.Print("No .env file found")
+	}
 }
 
 func main() {
@@ -23,13 +27,17 @@ func main() {
 		log.Fatalf("error: db connection err, %v", err)
 	}
 
-	libraryController := controllers.NewLibraryController(dbConn)
-	libraryRouteController := routes.NewLibraryRouteController(libraryController)
+	loggers := logger.NewLoggers()
+	libController := controllers.NewLibraryController(dbConn, loggers)
+	libRController := routes.NewLibraryRouteController(libController)
 
+	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 
-	libraryRouteController.LibraryRoute(router)
-	if err := router.Run(":" + serverConf.Port); err != nil {
+	libRController.LibraryRoute(router)
+
+	libController.Logs.Info.Printf("Server starts on %s", serverConf.Host+":"+serverConf.Port)
+	if err := router.Run(serverConf.Host + ":" + serverConf.Port); err != nil {
 		log.Fatalf("error: server didn't run, %v", err)
 	}
 }
