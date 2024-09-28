@@ -8,6 +8,7 @@ import (
 	"MusicLibrary/internal/routes"
 	"MusicLibrary/internal/service"
 	"MusicLibrary/pkg/logger"
+	"context"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -28,6 +29,9 @@ func main() {
 	if err != nil {
 		log.Fatalf("error: db connection err, %v", err)
 	}
+	defer dbConn.Close(context.Background())
+
+	database.RunMigrations(dbConn)
 
 	loggers := logger.NewLoggers()
 	libRepo := repository.NewLibraryRepository(dbConn, loggers)
