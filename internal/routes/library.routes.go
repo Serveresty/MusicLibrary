@@ -7,11 +7,11 @@ import (
 )
 
 type LibraryRouteController struct {
-	libraryController controllers.LibraryController
+	libContr *controllers.LibraryController
 }
 
-func NewLibraryRouteController(libraryController controllers.LibraryController) LibraryRouteController {
-	return LibraryRouteController{libraryController}
+func NewLibraryRouteController(libraryController *controllers.LibraryController) *LibraryRouteController {
+	return &LibraryRouteController{libraryController}
 }
 
 func (lc *LibraryRouteController) LibraryRoute(router *gin.Engine) {

@@ -1,16 +1,35 @@
 package controllers
 
 import (
-	"MusicLibrary/pkg/logger"
+	"MusicLibrary/internal/service"
 
-	"github.com/jackc/pgx/v4"
+	"github.com/gin-gonic/gin"
 )
 
 type LibraryController struct {
-	DB   *pgx.Conn
-	Logs *logger.Loggers
+	libService *service.LibraryService
 }
 
-func NewLibraryController(db *pgx.Conn, loggers *logger.Loggers) LibraryController {
-	return LibraryController{DB: db, Logs: loggers}
+func NewLibraryController(libService *service.LibraryService) *LibraryController {
+	return &LibraryController{libService: libService}
+}
+
+func (lc *LibraryController) Create(c *gin.Context) {
+
+}
+
+func (lc *LibraryController) GetSongsLibrary(c *gin.Context) {
+
+}
+
+func (lc *LibraryController) GetSongText(c *gin.Context) {
+
+}
+
+func (lc *LibraryController) Update(c *gin.Context) {
+
+}
+
+func (lc *LibraryController) Delete(c *gin.Context) {
+
 }

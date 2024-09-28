@@ -4,7 +4,9 @@ import (
 	"MusicLibrary/configs"
 	"MusicLibrary/database"
 	"MusicLibrary/internal/controllers"
+	"MusicLibrary/internal/repository"
 	"MusicLibrary/internal/routes"
+	"MusicLibrary/internal/service"
 	"MusicLibrary/pkg/logger"
 	"log"
 
@@ -28,15 +30,17 @@ func main() {
 	}
 
 	loggers := logger.NewLoggers()
-	libController := controllers.NewLibraryController(dbConn, loggers)
-	libRController := routes.NewLibraryRouteController(libController)
+	libRepo := repository.NewLibraryRepository(dbConn, loggers)
+	libServ := service.NewLibraryService(libRepo)
+	libCont := controllers.NewLibraryController(libServ)
+	libRoute := routes.NewLibraryRouteController(libCont)
 
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 
-	libRController.LibraryRoute(router)
+	libRoute.LibraryRoute(router)
 
-	libController.Logs.Info.Printf("Server starts on %s", serverConf.Host+":"+serverConf.Port)
+	libRepo.Logs.Info.Printf("Server starts on %s", serverConf.Host+":"+serverConf.Port)
 	if err := router.Run(serverConf.Host + ":" + serverConf.Port); err != nil {
 		log.Fatalf("error: server didn't run, %v", err)
 	}
