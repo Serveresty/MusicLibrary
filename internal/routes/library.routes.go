@@ -15,5 +15,15 @@ func NewLibraryRouteController(libraryController *controllers.LibraryController)
 }
 
 func (lc *LibraryRouteController) LibraryRoute(router *gin.Engine) {
+	songs := router.Group("songs")
+	{
+		songs.GET("/", lc.libContr.GetSongsLibrary)
+		songs.GET("/:id/text", lc.libContr.GetSongText)
 
+		songs.DELETE("/:id", lc.libContr.Delete)
+
+		songs.PATCH("/:id", lc.libContr.Update)
+
+		songs.POST("/", lc.libContr.Create)
+	}
 }
