@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"MusicLibrary/internal/service"
+	"MusicLibrary/models"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,7 +17,25 @@ func NewLibraryController(libService *service.LibraryService) *LibraryController
 }
 
 func (lc *LibraryController) Create(c *gin.Context) {
+	var sr models.SongRequest
+	if err := c.ShouldBindJSON(&sr); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
+	sd, status := lc.libService.GetMoreInfo(sr)
+	if status != 200 {
+		c.JSON(status, gin.H{"error": "err"})
+		return
+	}
+
+	err := lc.libService.Repo.Create(sr, sd)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Song created successfully"})
 }
 
 func (lc *LibraryController) GetSongsLibrary(c *gin.Context) {
