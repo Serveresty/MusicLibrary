@@ -61,7 +61,20 @@ func (lc *LibraryController) GetSongText(c *gin.Context) {
 }
 
 func (lc *LibraryController) Update(c *gin.Context) {
+	songID := c.Param("id")
+	var updSong models.Song
+	if err := c.ShouldBindJSON(&updSong); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
+	err := lc.libService.Repo.Update(songID, updSong)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "song has been updated"})
 }
 
 func (lc *LibraryController) Delete(c *gin.Context) {
