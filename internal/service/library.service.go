@@ -1,15 +1,19 @@
 package service
 
-import "MusicLibrary/internal/repository"
+import (
+	"MusicLibrary/internal/repository"
+	"MusicLibrary/models"
+)
 
 type LibraryService struct {
-	repo *repository.LibraryRepository
+	Repo *repository.LibraryRepository
 }
 
 func NewLibraryService(repo *repository.LibraryRepository) *LibraryService {
-	return &LibraryService{repo: repo}
+	return &LibraryService{Repo: repo}
 }
 
-func (ls *LibraryService) GetMoreInfo() {
+func (ls *LibraryService) GetMoreInfo(info models.SongRequest) (models.SongDetail, int) {
 
+	return models.SongDetail{}, 200
 }
