@@ -24,13 +24,13 @@ func (lc *LibraryController) Create(c *gin.Context) {
 		return
 	}
 
-	sd, status := lc.libService.GetMoreInfo(sr)
-	if status != 200 {
+	sd, status, err := lc.libService.GetMoreInfo(sr)
+	if status != http.StatusOK {
 		c.JSON(status, gin.H{"error": "err"})
 		return
 	}
 
-	err := lc.libService.Repo.Create(sr, sd)
+	err = lc.libService.Repo.Create(sr, sd)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
