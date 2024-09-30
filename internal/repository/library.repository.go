@@ -54,6 +54,11 @@ func (lc *LibraryRepository) Update() {
 
 }
 
-func (lc *LibraryRepository) Delete() {
+func (lc *LibraryRepository) Delete(songID string) error {
+	_, err := lc.db.Exec(context.Background(), `DELETE FROM "songs" WHERE id = $1`, songID)
+	if err != nil {
+		return err
+	}
 
+	return nil
 }
