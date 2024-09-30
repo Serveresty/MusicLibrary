@@ -4,6 +4,8 @@ import (
 	"MusicLibrary/models"
 	"MusicLibrary/pkg/logger"
 	"context"
+	"fmt"
+	"strings"
 
 	"github.com/jackc/pgx/v4"
 )
@@ -46,8 +48,31 @@ func (lc *LibraryRepository) GetSongsLibrary(minID, limit string) ([]models.Song
 	return songs, nil
 }
 
-func (lc *LibraryRepository) GetSongText() {
+func (lc *LibraryRepository) GetSongText(songID string, starts, limit int) ([]string, error) {
+	rows, err := lc.db.Query(context.Background(), `SELECT "text" FROM "songs" WHERE id = $1 `, songID)
+	if err != nil {
+		return nil, err
+	}
 
+	var text string
+	for rows.Next() {
+		if err := rows.Scan(&text); err != nil {
+			return nil, err
+		}
+	}
+
+	texts := strings.Split(text, "\n\n")
+	if starts > len(texts)-1 {
+		return nil, fmt.Errorf("invalid input value, max starts value is %v", len(texts)-1)
+	}
+	if starts < 0 || limit < 0 {
+		return nil, fmt.Errorf("invalid input value, below zero")
+	}
+	if len(texts)-1 < (starts + limit) {
+		return texts[starts:], nil
+	}
+
+	return texts[starts : starts+limit], nil
 }
 
 func (lc *LibraryRepository) Update(songID string, updSong models.Song) error {
