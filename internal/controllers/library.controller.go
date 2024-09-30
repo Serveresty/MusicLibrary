@@ -65,5 +65,12 @@ func (lc *LibraryController) Update(c *gin.Context) {
 }
 
 func (lc *LibraryController) Delete(c *gin.Context) {
+	songID := c.Param("id")
+	err := lc.libService.Repo.Delete(songID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
+	c.JSON(http.StatusOK, gin.H{"message": "song has been deleted"})
 }
