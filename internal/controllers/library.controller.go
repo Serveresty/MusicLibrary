@@ -4,6 +4,7 @@ import (
 	"MusicLibrary/internal/service"
 	"MusicLibrary/models"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -57,7 +58,28 @@ func (lc *LibraryController) GetSongsLibrary(c *gin.Context) {
 }
 
 func (lc *LibraryController) GetSongText(c *gin.Context) {
+	songID := c.Param("id")
+	starts := c.Query("starts")
+	limit := c.Query("limit")
 
+	startINT, err := strconv.Atoi(starts)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "wrong starts num"})
+		return
+	}
+	limitINT, err := strconv.Atoi(limit)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "wrong limit num"})
+		return
+	}
+
+	texts, err := lc.libService.Repo.GetSongText(songID, startINT, limitINT)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": texts})
 }
 
 func (lc *LibraryController) Update(c *gin.Context) {
