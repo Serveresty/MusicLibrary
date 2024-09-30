@@ -50,8 +50,24 @@ func (lc *LibraryRepository) GetSongText() {
 
 }
 
-func (lc *LibraryRepository) Update() {
+func (lc *LibraryRepository) Update(songID string, updSong models.Song) error {
+	query := `
+        UPDATE songs
+        SET 
+			"group" = COALESCE(NULLIF($1, ''), "group"),
+			"song" = COALESCE(NULLIF($2, ''), "song"),
+			"release_date" = COALESCE(NULLIF($3, ''), "release_date"),
+            "text" = COALESCE(NULLIF($4, ''), "text"),
+            "link" = COALESCE(NULLIF($5, ''), "link")
+        WHERE id = $6;
+    `
 
+	_, err := lc.db.Exec(context.Background(), query, updSong.Group, updSong.Song, updSong.ReleaseDate, updSong.Text, updSong.Link, songID)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (lc *LibraryRepository) Delete(songID string) error {
