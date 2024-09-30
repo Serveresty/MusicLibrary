@@ -39,7 +39,21 @@ func (lc *LibraryController) Create(c *gin.Context) {
 }
 
 func (lc *LibraryController) GetSongsLibrary(c *gin.Context) {
+	starts := c.Query("starts")
+	limit := c.Query("limit")
 
+	songs, err := lc.libService.Repo.GetSongsLibrary(starts, limit)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	if len(songs) == 0 {
+		c.JSON(http.StatusOK, gin.H{"data": "no data found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": songs})
 }
 
 func (lc *LibraryController) GetSongText(c *gin.Context) {
