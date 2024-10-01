@@ -24,7 +24,7 @@ func (ls *LibraryService) GetMoreInfo(info models.SongRequest) (models.SongDetai
 
 	resp, err := http.Get(url)
 	if err != nil {
-		return models.SongDetail{}, http.StatusInternalServerError, err
+		return models.SongDetail{}, resp.StatusCode, err
 	}
 	defer resp.Body.Close()
 
