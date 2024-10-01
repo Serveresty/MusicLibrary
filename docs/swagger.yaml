@@ -1,0 +1,186 @@
+definitions:
+  models.Song:
+    properties:
+      group:
+        type: string
+      id:
+        type: integer
+      link:
+        type: string
+      releaseDate:
+        type: string
+      song:
+        type: string
+      text:
+        type: string
+    type: object
+  models.SongRequest:
+    properties:
+      group:
+        type: string
+      song:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /songs:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает список песен с поддержкой пагинации
+      parameters:
+      - description: Номер первого элемента для пагинации
+        in: query
+        name: starts
+        type: string
+      - description: Количество элементов для возврата
+        in: query
+        name: limit
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешный ответ с песнями
+          schema:
+            items:
+              $ref: '#/definitions/models.Song'
+            type: array
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Получить библиотеку песен
+      tags:
+      - Песни
+    post:
+      consumes:
+      - application/json
+      description: Добавляет новую песню в библиотеку с дополнительной информацией,
+        полученной из внешнего API
+      parameters:
+      - description: Данные песни
+        in: body
+        name: song
+        required: true
+        schema:
+          $ref: '#/definitions/models.SongRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Ok
+          schema:
+            type: string
+        "400":
+          description: Неверные данные запроса
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Добавить новую песню
+      tags:
+      - Песни
+  /songs/{id}:
+    delete:
+      description: Удаляет песню из библиотеки по ее ID
+      parameters:
+      - description: ID песни
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Песня успешно удалена
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Удалить песню
+      tags:
+      - Песни
+    patch:
+      consumes:
+      - application/json
+      description: Обновляет информацию о песне по ее ID
+      parameters:
+      - description: ID песни
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Обновленные данные песни
+        in: body
+        name: song
+        required: true
+        schema:
+          $ref: '#/definitions/models.Song'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешное обновление
+          schema:
+            type: string
+        "400":
+          description: Неверные данные запроса
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Обновить данные песни
+      tags:
+      - Песни
+  /songs/{id}/text:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает текст песни по ее ID с поддержкой пагинации (начало
+        и количество строк текста)
+      parameters:
+      - description: ID песни
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Номер первой строки для пагинации
+        in: query
+        name: starts
+        required: true
+        type: string
+      - description: Количество строк для возврата
+        in: query
+        name: limit
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешный ответ с текстом песни
+          schema:
+            items:
+              type: string
+            type: array
+        "400":
+          description: Неверный формат параметров запроса
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Получить текст песни
+      tags:
+      - Песни
+swagger: "2.0"
