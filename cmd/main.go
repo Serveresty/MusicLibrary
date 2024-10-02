@@ -27,18 +27,23 @@ func main() {
 	dbConf := configs.LoadDBConfig()
 	serverConf := configs.LoadServerConfig()
 
+	loggers, err := logger.NewLoggers()
+	if err != nil {
+		log.Fatalf("error: init loggers err, %v", err)
+	}
+
 	dbConn, err := database.DBInit(dbConf)
 	if err != nil {
 		log.Fatalf("error: db connection err, %v", err)
 	}
 	defer dbConn.Close(context.Background())
 
+	loggers.InfoLog(
+		"Database connected",
+	)
+
 	database.RunMigrations(dbConn)
 
-	loggers, err := logger.NewLoggers()
-	if err != nil {
-		log.Fatalf("error: init loggers err, %v", err)
-	}
 	libRepo := repository.NewLibraryRepository(dbConn, loggers)
 	libServ := service.NewLibraryService(libRepo)
 	libCont := controllers.NewLibraryController(libServ)

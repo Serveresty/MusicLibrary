@@ -1,0 +1,15 @@
+{"time":"2024-10-02T19:25:25.6821062+03:00","level":"INFO","msg":"Database connected"}
+{"time":"2024-10-02T19:25:25.8904134+03:00","level":"INFO","msg":"Server started","address":"localhost","port":"8080"}
+{"time":"2024-10-02T19:27:11.3130476+03:00","level":"INFO","msg":"Database connected"}
+{"time":"2024-10-02T19:27:11.5166496+03:00","level":"INFO","msg":"Server started","address":"localhost","port":"8080"}
+{"time":"2024-10-02T19:27:16.9004898+03:00","level":"INFO","msg":"Info log testing in get lib"}
+{"time":"2024-10-02T19:29:45.5057525+03:00","level":"INFO","msg":"Database connected"}
+{"time":"2024-10-02T19:29:45.7418361+03:00","level":"INFO","msg":"Server started","address":"localhost","port":"8080"}
+{"time":"2024-10-02T19:30:26.7643632+03:00","level":"INFO","msg":"Database connected"}
+{"time":"2024-10-02T19:30:27.0681805+03:00","level":"INFO","msg":"Server started","address":"localhost","port":"8080"}
+{"time":"2024-10-02T19:31:05.0111532+03:00","level":"INFO","msg":"Database connected"}
+{"time":"2024-10-02T19:31:05.2205181+03:00","level":"INFO","msg":"Server started","address":"localhost","port":"8080"}
+{"time":"2024-10-02T19:38:55.0791515+03:00","level":"INFO","msg":"Database connected"}
+{"time":"2024-10-02T19:38:55.2736882+03:00","level":"INFO","msg":"Server started","address":"localhost","port":"8080"}
+{"time":"2024-10-02T20:01:02.4390231+03:00","level":"INFO","msg":"Database connected"}
+{"time":"2024-10-02T20:01:02.6836246+03:00","level":"INFO","msg":"Server started","address":"localhost","port":"8080"}

@@ -12,12 +12,12 @@ type Loggers struct {
 }
 
 func NewLoggers() (*Loggers, error) {
-	infoHandler, err := newFileHandler("./logs/info.json")
+	infoHandler, err := newFileHandler("./logs/info.json", slog.LevelInfo)
 	if err != nil {
 		return nil, err
 	}
 
-	debugHandler, err := newFileHandler("./logs/debug.json")
+	debugHandler, err := newFileHandler("./logs/debug.json", slog.LevelDebug)
 	if err != nil {
 		return nil, err
 	}
@@ -31,12 +31,12 @@ func NewLoggers() (*Loggers, error) {
 	}, nil
 }
 
-func newFileHandler(filePath string) (*slog.JSONHandler, error) {
+func newFileHandler(filePath string, level slog.Level) (*slog.JSONHandler, error) {
 	file, err := os.OpenFile(filePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		return nil, err
 	}
-	return slog.NewJSONHandler(file, nil), nil
+	return slog.NewJSONHandler(file, &slog.HandlerOptions{Level: level}), nil
 }
 
 func (l *Loggers) InfoLog(msg string, attrs ...slog.Attr) {
