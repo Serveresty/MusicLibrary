@@ -167,7 +167,7 @@ func (lr *LibraryRepository) Update(songID string, updSong models.Song) error {
 func (lr *LibraryRepository) Delete(songID string) error {
 	debugLogg := func(result, err string) {
 		lr.Logs.DebugLog(
-			"Get song's text db method",
+			"Delete song db method",
 			slog.Group("params",
 				slog.String("songID", songID),
 			),
