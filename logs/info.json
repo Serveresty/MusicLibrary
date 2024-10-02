@@ -13,3 +13,6 @@
 {"time":"2024-10-02T19:38:55.2736882+03:00","level":"INFO","msg":"Server started","address":"localhost","port":"8080"}
 {"time":"2024-10-02T20:01:02.4390231+03:00","level":"INFO","msg":"Database connected"}
 {"time":"2024-10-02T20:01:02.6836246+03:00","level":"INFO","msg":"Server started","address":"localhost","port":"8080"}
+{"time":"2024-10-02T20:30:42.526132+03:00","level":"INFO","msg":"Database connected"}
+{"time":"2024-10-02T20:30:42.8465121+03:00","level":"INFO","msg":"Server started","address":"localhost","port":"8080"}
+{"time":"2024-10-02T20:30:56.1517902+03:00","level":"INFO","msg":"Get song's text handler","method":"GET","path":"/songs/3/text?starts=2&limit=5","status":500,"user_agent":"127.0.0.1:62654"}
