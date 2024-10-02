@@ -9,7 +9,9 @@ import (
 	"MusicLibrary/internal/service"
 	"MusicLibrary/pkg/logger"
 	"context"
+	"io"
 	"log"
+	"log/slog"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -33,18 +35,28 @@ func main() {
 
 	database.RunMigrations(dbConn)
 
-	loggers := logger.NewLoggers()
+	loggers, err := logger.NewLoggers()
+	if err != nil {
+		log.Fatalf("error: init loggers err, %v", err)
+	}
 	libRepo := repository.NewLibraryRepository(dbConn, loggers)
 	libServ := service.NewLibraryService(libRepo)
 	libCont := controllers.NewLibraryController(libServ)
 	libRoute := routes.NewLibraryRouteController(libCont)
 
 	gin.SetMode(gin.ReleaseMode)
+	gin.DefaultWriter = io.Discard
+	gin.DefaultErrorWriter = io.Discard
 	router := gin.Default()
 
 	libRoute.LibraryRoute(router)
 
-	libRepo.Logs.Info.Printf("Server starts on %s", serverConf.Host+":"+serverConf.Port)
+	loggers.InfoLog(
+		"Server started",
+		slog.String("address", serverConf.Host),
+		slog.String("port", serverConf.Port),
+	)
+
 	if err := router.Run(serverConf.Host + ":" + serverConf.Port); err != nil {
 		log.Fatalf("error: server didn't run, %v", err)
 	}
